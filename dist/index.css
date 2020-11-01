@@ -1,0 +1,38 @@
+#grid {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+#car {
+    width: 25px;
+    height: 25px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAOCAYAAADaOrdAAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5AgWBwkrfDLkOgAAAAFvck5UAc+id5oAAAOZSURBVDjLrZLNa1xlFMZ/73vvnTsfdz4ySVrHkDipkWgWSbUqJa1QqCK404XL0GUXWqgrBel/0D9AxI1YV4KChVLcNDQiIdDaWJJKQicmab5n5k7mTu7H3Pu+LhIjWsWNB87icJ5zznPOeYz3Xhpmcc/NAw6Q+Q9PA5lXe5wPx8qFD7aENdcNuxJ09mmsIUfz6W49ihGvPV99vWIbn5pCVIRAZ0yT1U7A5tgEfb29mFqztLhIcXCQcqVCOU7wVpZHontzzmzzYPFUPhOeHTwJQiCAoJtQa7hywLZqS4n8RDUay2ZWx19Wi8VRQwo6UZdS2mas0sd82iClIwytyeYsMmmDwXOTmNJgdi6HPfkG71SHx3u++pyPBgoIrQGINczuNAna3pne9Z38t0pcMR3LHHn3xSpFQ/Boz+VmbYNqT57Llo/d3CYJQoysBdrl4defsSBTjFy+ysWLb9LRmpnVxyzfvMFwykABQghe6evnVsdkzMm8fX9v/4pZzWdVue0acbNJ1OpwulTgQj6Fv7NFEgZIpUEIpNfmrJMjk0T8sLZKS0oaQhCPjrH2TUzVFGhAa43t7VOxLfY8j8EonJJBvU6wu0sURSy4HV4IO3jrT4iDAK0BIQBQScJBa59Bt4669T1LrRYhcPL8eR4MnCLoxsAhXh34xDvbJHGCUCojSRKOuhEohY0+iv/ZUloh9l10nABgOg6+ZaP/VvNHHtAyimKSRB0nj4j/ryabjTaBHyElZA0D1+8+xeqYALAfdlE9vRiWCUC31cKJfKT8k51WGrfpoQ77CKlihdvwiMOYEdvkbm0b3wsQgBQCIQRSCJRSdP2In2q7bF94C53LkQCbMzNMbNSwj4YCuK0OjWYHQwq0NDxzC4xfntRZ3XFZV/AgilGPNni5nCNvSTQgpWTfC3iYGKyUnyHo7WPTdRFS0pq+QzkMSTImCui0fRaWt/BsixNS6hXb/kJM9hZ+7vMOJuIwJgKKAtKmycbkOXKlEobWrNYe4ww9x/ilS6RNkzvT0/hAamiI/PXrvN/YxjzaxA9jfhWCQjHLcpB8d1daV01XpqYi7X8sDPksoA6AumESOw79xSKG1mxlc+RTKWZv36aUJMJZ/20sM3+/+GO9fe+E1sENrSGMDn8EeGlL9gdJbS1buOa03DUxnrGZzxfSxIlxfNQoAs/7N7HoMyVnqphNn54L9LU2yvuLJgXgR2Cn44rfCTcDn98Bgf26CGD33/QAAABEZVhJZk1NACoAAAAIAAIBEgADAAAAAQABAACHaQAEAAAAAQAAACYAAAAAAAKgAgAEAAAAAQAAAPqgAwAEAAAAAQAAAIwAAAAAEZZt8gAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMC0wOC0yMlQwNzowOTowNiswMDowMLQX1nsAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjAtMDgtMjJUMDc6MDQ6MDQrMDA6MDCnK/ReAAAAEnRFWHRleGlmOkV4aWZPZmZzZXQAMzituL4jAAAAGHRFWHRleGlmOlBpeGVsWERpbWVuc2lvbgAyNTA5AwpxAAAAGHRFWHRleGlmOlBpeGVsWURpbWVuc2lvbgAxNDC/UWQfAAAAAElFTkSuQmCC");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.cell {
+    border: 2px solid black;
+    width: 25px;
+    height: 25px;
+}
+
+.start {
+    background-color: red;
+}
+
+.end {
+    background-color: green;
+}
+
+.path {
+    background-color: blue;
+}
+
+.wall {
+    background-color: black;
+}
+
+.right {
+    float: right;
+}

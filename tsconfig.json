@@ -1,0 +1,12 @@
+{
+    "include": ["src/**/*"],
+    "compilerOptions": {
+        "strict": true,
+        "checkJs": true,
+        "allowJs": true,
+        "jsx": "react",
+        "jsxFactory": "h",
+        "outDir": "output",
+        "skipLibCheck": true
+    }
+}
