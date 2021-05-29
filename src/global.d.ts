@@ -1,8 +1,9 @@
-declare const enum DIRECTIONS {
+declare const enum Direction {
     UP,
     DOWN,
     LEFT,
     RIGHT,
+    NONE,
 }
 declare const enum CarSpace {
     "path",
@@ -22,7 +23,7 @@ interface Pathfinder {
     name: string;
     description: string;
     Pathfind(
-        move: (direction: DIRECTIONS, amount?: number) => CarCoords | void,
+        move: (direction: Direction, amount?: number) => CarCoords | void,
         grid: CarSpace[][],
         carCoords: CarCoords
     ): boolean | void;

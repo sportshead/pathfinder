@@ -4,7 +4,7 @@ export default class AStar implements Pathfinder {
     readonly name = "A* Pathfinder";
     readonly description = "Pathfinder using the A* algorithm";
     Pathfind(
-        move: (direction: DIRECTIONS, amount?: number) => CarCoords | void,
+        move: (direction: Direction, amount?: number) => CarCoords | void,
         grid: CarSpace[][],
         carCoords: CarCoords
     ): boolean | void {

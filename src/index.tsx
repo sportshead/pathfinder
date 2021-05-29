@@ -2,15 +2,29 @@ import BruteForcePathfinder from "./pathfinders/bruteforce";
 import { InputDialog } from "./dialog/InputDialog";
 import { SelectDialog } from "./dialog/SelectDialog";
 import { h } from "tsx-dom";
+import Logger, { ConsoleLogOutput } from "./Logger";
+import FloodfillPathfinder from "./pathfinders/floodfill";
+
+export const logger: Logger = new Logger(new ConsoleLogOutput());
 
 // https://docs.google.com/spreadsheets/d/1jM7PzNP-hXgMldEpWVUCW9yckyoewyVcfkUuHqHlAU4/edit?usp=sharing
 const table = document.getElementById("grid") as HTMLElement;
-const grid = [
+/* const grid = [
     [2, 0, 0, 1, 1],
     [1, 1, 0, 1, 1],
     [0, 0, 0, 0, 1],
     [0, 1, 1, 0, 1],
     [0, 0, 0, 0, 3],
+]; */
+/* const grid = [
+    [2, 1, 0],
+    [0, 0, 0],
+    [1, 0, 3],
+]; */
+const grid = [
+    [0, 0, 0, 0],
+    [2, 1, 1, 0],
+    [0, 0, 1, 3],
 ];
 //const grid = genGrid(10, 10);
 table.innerHTML = grid
@@ -27,32 +41,32 @@ table.innerHTML = grid
                 .join("")}</tr>`
     )
     .join("");
-let carCoords: CarCoords = { x: 0, y: 0 };
-let carCell = document.getElementById("X0Y0") as HTMLElement;
+let carCoords: CarCoords = { x: 0, y: 1 };
+let carCell = document.getElementById("X0Y1") as HTMLElement;
 const car = document.createElement("div");
 car.id = "car";
 carCell.appendChild(car);
 const moves = document.getElementById("moves") as HTMLElement;
 let finished = false;
-function move(direction: DIRECTIONS, amount = 1): CarCoords | void {
+function move(direction: Direction, amount = 1): CarCoords | void {
     if (finished) {
         return;
     }
     const newCoords = { x: carCoords.x, y: carCoords.y };
     switch (direction) {
-        case DIRECTIONS.UP:
+        case Direction.UP:
             console.log(`going up by ${amount}`);
             newCoords.y -= amount;
             break;
-        case DIRECTIONS.DOWN:
+        case Direction.DOWN:
             console.log(`going down by ${amount}`);
             newCoords.y += amount;
             break;
-        case DIRECTIONS.LEFT:
+        case Direction.LEFT:
             console.log(`going left by ${amount}`);
             newCoords.x -= amount;
             break;
-        case DIRECTIONS.RIGHT:
+        case Direction.RIGHT:
             console.log(`going right by ${amount}`);
             newCoords.x += amount;
             break;
@@ -101,26 +115,30 @@ class ManualControlFunction implements Pathfinder {
     readonly name = "Manual Control";
     readonly description = "";
     Pathfind(
-        move: (direction: DIRECTIONS, amount?: number) => CarCoords | void
+        move: (direction: Direction, amount?: number) => CarCoords | void
     ) {
         alert(`${this.name} has been activated.`);
         document.addEventListener("keydown", (e) => {
             if (!e.repeat) {
                 if (["ArrowUp", "KeyW"].includes(e.code)) {
-                    move(DIRECTIONS.UP, 1);
+                    move(Direction.UP, 1);
                 } else if (["ArrowDown", "KeyS"].includes(e.code)) {
-                    move(DIRECTIONS.DOWN, 1);
+                    move(Direction.DOWN, 1);
                 } else if (["ArrowLeft", "KeyA"].includes(e.code)) {
-                    move(DIRECTIONS.LEFT, 1);
+                    move(Direction.LEFT, 1);
                 } else if (["ArrowRight", "KeyD"].includes(e.code)) {
-                    move(DIRECTIONS.RIGHT, 1);
+                    move(Direction.RIGHT, 1);
                 }
             }
         });
     }
 }
 
-const PATHFINDERS = [new ManualControlFunction(), new BruteForcePathfinder()];
+const PATHFINDERS = [
+    new ManualControlFunction(),
+    new BruteForcePathfinder(),
+    new FloodfillPathfinder(),
+];
 window.PATHFINDERS = PATHFINDERS;
 
 let index = prompt(`Choose a pathfinder algorithm (type the number in front):
@@ -140,7 +158,7 @@ PATHFINDERS[+index].Pathfind(move, grid, carCoords);
     console.log,
     "placeholder"
 ); */
-const pathfindersMap: Map<string, HTMLElement> = new Map();
+/* const pathfindersMap: Map<string, HTMLElement> = new Map();
 PATHFINDERS.forEach((pathfinder, i) => {
     pathfindersMap.set(
         i.toString(),
@@ -158,3 +176,4 @@ const dialog = new SelectDialog(
 );
 // @ts-ignore
 window.dialog = dialog;
+ */
