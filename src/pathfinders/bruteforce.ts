@@ -7,8 +7,12 @@ export default class BruteForcePathfinder implements Pathfinder {
         carCoords: CarCoords
     ): boolean | void {
         alert(`${this.name} has been activated.`);
-        while (grid[carCoords.x][carCoords.y] !== CarSpace.end) {
-            carCoords = move(~~(Math.random() * 3)) || carCoords;
-        }
+        const int = setInterval(() => {
+            if (grid[carCoords.y][carCoords.x] === CarSpace.end) {
+                clearInterval(int);
+                return;
+            }
+            carCoords = move(~~(Math.random() * 4)) || carCoords;
+        }, 500);
     }
 }

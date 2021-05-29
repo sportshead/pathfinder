@@ -71,9 +71,9 @@ function move(direction: Direction, amount = 1): CarCoords | void {
             newCoords.x += amount;
             break;
     }
-    if (newCoords.y < 0 || newCoords.y >= grid[0].length) {
+    if (newCoords.y < 0 || newCoords.y >= grid.length) {
         return console.error("Y coordinate out of bounds! Abandoning move.");
-    } else if (newCoords.x < 0 || newCoords.x >= grid.length) {
+    } else if (newCoords.x < 0 || newCoords.x >= grid[newCoords.y]?.length) {
         return console.error("X coordinate out of bounds! Abandoning move.");
     } else if (
         document
