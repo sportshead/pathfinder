@@ -27,7 +27,7 @@ export default class FloodfillPathfinder implements Pathfinder {
             move,
         });
         console.log(path);
-        if (path === void 0) {
+        if (!path) {
             alert("no valid path");
             throw "no valid path";
         }
@@ -41,20 +41,42 @@ export default class FloodfillPathfinder implements Pathfinder {
         }, 500);
     }
 
-    private cache: Map<[number, number], Direction[]> = new Map();
+    private cache: Map<[number, number, boolean], Direction[]> = new Map();
 
     private recurse(
         pos: [number, number],
         dir: [Direction, Direction],
         path: Direction[],
-        ctx: PathfinderContext
-    ): Direction[] | void {
+        ctx: PathfinderContext,
+        haveBeen: [number, number][] = [],
+        ignoreBias = false
+    ): Direction[] | void | false {
         if (pos[1] > ctx.grid.length || pos[0] > ctx.grid[pos[1]].length) {
             throw "out of bounds";
         }
-        console.log("recurse", pos, path);
-        const paths = this.calc(pos, dir, path[path.length - 1], ctx);
-        console.log("paths", paths);
+        console.log(`${ignoreBias ? "unbiased " : ""}recurse`, pos, path);
+
+        //#region sanity checks
+        if (haveBeen.includes(pos)) {
+            console.log("going in circles");
+            return false;
+        }
+
+        // +10 just in case
+        if (path.length > ctx.grid.length * ctx.grid[0].length + 10) {
+            console.log("path too long");
+            return false;
+        }
+        //#endregion
+
+        const paths = this.calc(
+            pos,
+            dir,
+            path[path.length - 1],
+            ctx,
+            ignoreBias
+        );
+        console.log(`${ignoreBias ? "unbiased " : ""}paths`, paths);
         if (paths.length === 0) {
             return;
         } else if (paths.length === 1) {
@@ -64,23 +86,59 @@ export default class FloodfillPathfinder implements Pathfinder {
             ) {
                 return [...path, paths[0]];
             }
-            return this.recurse(
+            const p = this.recurse(
                 this.calcMove(pos, paths[0], 1),
                 dir,
                 [...path, paths[0]],
-                ctx
+                ctx,
+                [...haveBeen, pos]
             );
+            if (p == void 0 && !ignoreBias) {
+                // check unbiased
+                console.log("going unbiased");
+                return this.recurse(
+                    pos,
+                    dir,
+                    path,
+                    ctx,
+                    [...haveBeen, pos],
+                    true
+                );
+            } else {
+                return p;
+            }
         } else {
-            return paths
+            const p: Direction[][] = paths
                 .map((d) =>
                     this.recurse(
                         this.calcMove(pos, d, 1),
                         dir,
                         [...path, d],
-                        ctx
+                        ctx,
+                        [...haveBeen, pos]
                     )
                 )
-                .filter((p) => p)[0];
+                .filter((p1) => p1) as Direction[][];
+            if (p.length === 0 && !ignoreBias) {
+                // check unbiased
+                console.log("going unbiased");
+                return this.recurse(
+                    pos,
+                    dir,
+                    path,
+                    ctx,
+                    [...haveBeen, pos],
+                    true
+                );
+            } else {
+                let shortest = p[0];
+                p.slice(1).forEach((p1) => {
+                    if (shortest.length > p1.length) {
+                        shortest = p1;
+                    }
+                });
+                return shortest;
+            }
         }
     }
 
@@ -88,13 +146,14 @@ export default class FloodfillPathfinder implements Pathfinder {
         pos: [number, number],
         dir: [Direction, Direction],
         cameFrom: Direction,
-        ctx: PathfinderContext
+        ctx: PathfinderContext,
+        ignoreBias = false
     ): Direction[] {
-        console.log("calc", pos, cameFrom);
-        if (this.cache.has(pos)) {
-            return this.cache.get(pos)!;
+        //console.log("calc", pos, cameFrom);
+        if (this.cache.has([...pos, ignoreBias])) {
+            return this.cache.get([...pos, ignoreBias])!;
         }
-        const dirs: Direction[] = [];
+        let dirs: Direction[] = [];
         let s,
             hasRoute = false;
         if (
@@ -103,7 +162,7 @@ export default class FloodfillPathfinder implements Pathfinder {
             s !== void 0 &&
             this.oppositeDir(dir[0]) !== cameFrom
         ) {
-            console.log("can go", dir[0], s);
+            //console.log("can go", dir[0], s);
             hasRoute = true;
             if (s === CarSpace.end) {
                 return [dir[0]];
@@ -116,12 +175,16 @@ export default class FloodfillPathfinder implements Pathfinder {
             s !== void 0 &&
             this.oppositeDir(dir[1]) !== cameFrom
         ) {
-            console.log("can go", dir[1], s);
+            //console.log("can go", dir[1], s);
             hasRoute = true;
             if (s === CarSpace.end) {
                 return [dir[1]];
             }
             dirs.push(dir[1]);
+        }
+        if (ignoreBias) {
+            hasRoute = false;
+            dirs = [];
         }
         if (!hasRoute) {
             if (
@@ -136,7 +199,8 @@ export default class FloodfillPathfinder implements Pathfinder {
                     return [this.oppositeDir(dir[0])];
                 }
                 dirs.push(this.oppositeDir(dir[0]));
-            } else if (
+            }
+            if (
                 (s = this.spaceAt(
                     this.calcMove(pos, this.oppositeDir(dir[1]), 1),
                     ctx
@@ -150,7 +214,7 @@ export default class FloodfillPathfinder implements Pathfinder {
                 dirs.push(this.oppositeDir(dir[1]));
             }
         }
-        this.cache.set(pos, dirs);
+        this.cache.set([...pos, ignoreBias], dirs);
         return dirs;
     }
 

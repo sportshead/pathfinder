@@ -13,7 +13,7 @@ const table = document.getElementById("grid") as HTMLElement;
     [2, 0, 0, 1, 1],
     [1, 1, 0, 1, 1],
     [0, 0, 0, 0, 1],
-    [0, 1, 1, 0, 1],
+    [0, 1, 1, 1, 1],
     [0, 0, 0, 0, 3],
 ]; */
 /* const grid = [
@@ -21,11 +21,51 @@ const table = document.getElementById("grid") as HTMLElement;
     [0, 0, 0],
     [1, 0, 3],
 ]; */
-const grid = [
+/* const grid = [
     [0, 0, 0, 0],
     [2, 1, 1, 0],
     [0, 0, 1, 3],
+]; */
+///*
+const grid = [
+    //1 = wall, 2 = end, 3 = start
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0],
+    [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
+    [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+    [1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0],
+    [1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0],
+    [1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 3],
 ];
+//*/
+/*
+const grid = [
+    [2, 0, 0, 0, 1, 1],
+    [0, 1, 0, 0, 1, 1],
+    [0, 1, 1, 0, 0, 0],
+    [0, 0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 1],
+    [0, 1, 1, 0, 1, 0],
+    [0, 1, 1, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 0, 0],
+    [1, 0, 1, 1, 0, 1],
+    [1, 0, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 3],
+];
+//*/
 //const grid = genGrid(10, 10);
 table.innerHTML = grid
     .map(
@@ -34,15 +74,19 @@ table.innerHTML = grid
                 .map(
                     (cell, Ncell) =>
                         `<td id="X${Ncell}Y${Nrow}" class="cell ${
-                            // @ts-ignore
-                            { 0: "path", 1: "wall", 2: "start", 3: "end" }[cell]
+                            /* @ts-ignore*/ {
+                                0: "path",
+                                1: "wall",
+                                2: "start",
+                                3: "end",
+                            }[cell]
                         }"></td>`
                 )
                 .join("")}</tr>`
     )
     .join("");
-let carCoords: CarCoords = { x: 0, y: 1 };
-let carCell = document.getElementById("X0Y1") as HTMLElement;
+let carCoords: CarCoords = { x: 0, y: 0 };
+let carCell = document.getElementById("X0Y0") as HTMLElement;
 const car = document.createElement("div");
 car.id = "car";
 carCell.appendChild(car);
